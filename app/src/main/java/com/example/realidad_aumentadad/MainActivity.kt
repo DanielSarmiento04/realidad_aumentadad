@@ -1,5 +1,6 @@
 package com.example.realidad_aumentadad
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -40,12 +41,14 @@ class MainActivity : ComponentActivity() {
                     MainView(modifier = Modifier.padding(innerPadding))
                 }
             }
-        }
+         }
     }
 }
 
 @Composable
 fun MainView(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -54,9 +57,8 @@ fun MainView(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        val context = LocalContext.current
-        val input_stream = context.assets.open("bomba-playstore.png")
-        val image_bitmap = BitmapFactory.decodeStream(input_stream)
+        val inputStream = context.assets.open("bomba-playstore.png")
+        val imageBitmap = BitmapFactory.decodeStream(inputStream)
 
         // Title at the top
         Text(
@@ -68,35 +70,38 @@ fun MainView(modifier: Modifier = Modifier) {
 
         // Image in the middle
         Image(
-            bitmap = image_bitmap.asImageBitmap(), // Replace with your image resource
+            bitmap = imageBitmap.asImageBitmap(),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
-                .fillMaxWidth(0.8f) // Adjust this to control the horizontal tolerance
-                .aspectRatio(1f) // Maintain the aspect ratio of the image
+                .fillMaxWidth(0.8f)
+                .aspectRatio(1f)
         )
 
         // Button at the bottom
         Button(
-            onClick = { /* Handle button click */ },
+            onClick = {
+                val intent = Intent(context, CameraActivity::class.java)
+                context.startActivity(intent)
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 0.dp) // Adjusted padding to fit the small text below
+                .padding(bottom = 4.dp)
         ) {
             Text(text = "Iniciar")
         }
 
-        // Small text below the button
+        // Small text directly below the button
         Text(
             text = "desarrollado por el semillero sima",
             fontSize = 12.sp,
             fontWeight = FontWeight.Light,
-            modifier = Modifier.padding(bottom = 2.dp, top = 1.dp)
+            modifier = Modifier.padding(top = 4.dp)
         )
-
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
